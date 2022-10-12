@@ -22,7 +22,9 @@ public class QueueableCallout implements Queueable, Database.AllowsCallouts {
     }
 
     public void execute(QueueableContext context) {
-        Map<Id, sObject> recordsMap = new Map<Id,sObject>(records);        
+        Map<Id, sObject> recordsMap = new Map<Id,sObject>(records);
+
+        QueueableResponseProcessor responseProcessor = new QueueableResponseProcessor();
 
         // Insert 7
         for (sObject record : recordsMap.values()) {
@@ -41,7 +43,7 @@ public class QueueableCallout implements Queueable, Database.AllowsCallouts {
             chainNewJob(recordsMap.values());            
         }
 
-        // Process response
+        responseProcessor.updateAccounts();
     }
 
     private void chainNewJob(List<sObject> remainingRecords) {
